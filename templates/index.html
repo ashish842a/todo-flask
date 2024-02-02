@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>FlaskTest</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+    <!-- this section can be replaced by a child document -->
+    {% block body %}
+
+    <form method="POST" action="{{ url_for('add_task') }}" onsubmit="showAlert()">
+		<h2>Todo List</h2>
+        <label for="title">Title:</label>
+        <input type="text" name="title" required>
+        <br>
+        <label for="desc">Description:</label>
+        <input type="text" name="desc" required>
+        <br>
+        <input id="addTask" type="submit" value="Add Task">
+    </form>
+
+    <ul>
+        <li>
+            <span>S.no</span>
+            <span>Title</span>
+            <span>Description</span>
+            <span>Update</span>
+            <span>Delete</span>
+        </li>
+        {% for task in tasks %}
+        <li>
+            <span>{{ loop.index }}</span>
+            <span>{{ task.title }}</span>
+            <span>{{ task.desc }}</span>
+            <a href="{{ url_for('update_task', sno=task.sno) }}"><button class="btn">Edit</button></a>
+            <a href="{{ url_for('delete_task', sno=task.sno) }}"><button class="deletebtn">Delete</button></a>
+            
+        </li>
+        {% endfor %}
+    </ul>
+
+    <div class="alert" id="update-success-message">Data updated successfully</div>
+
+    <script>
+        // Display the alert when the "Update Task" button is clicked
+        var updateAlertTriggers = document.querySelectorAll('.update-alert-trigger');
+        var updateSuccessMessage = document.getElementById('update-success-message');
+        updateAlertTriggers.forEach(function (trigger) {
+            trigger.addEventListener('click', function () {
+                updateSuccessMessage.style.display = 'block';
+                // After a delay, hide the alert
+                setTimeout(function () {
+                    updateSuccessMessage.style.display = 'none';
+                }, 3000); // Adjust the delay as needed (in milliseconds)
+            });
+        });
+
+
+		function showAlert() {
+            alert('Task added successfully!');
+        }
+    </script>
+
+    {% endblock %}
+
+</body>
+
+</html>
